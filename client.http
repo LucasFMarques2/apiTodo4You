@@ -1,0 +1,66 @@
+@baseUrl = http://localhost:3333
+@authToken = {{authenticate.response.body.access_token}}
+
+# @name create_user
+POST {{baseUrl}}/usuarios
+Content-Type: application/json
+
+{
+  "name": "Fulano",
+  "email": "teste@mail.com",
+  "password": "12345678"
+}
+
+###
+
+# @name authenticate
+POST {{baseUrl}}/sessao
+Content-Type: application/json
+
+{
+  "email": "teste@mail.com",
+  "password": "12345678"
+}
+
+###
+
+# @name create_task
+POST {{baseUrl}}/tarefas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "tarefaa teste 01",
+  "status": "pendente",
+  "description": "desscrição da tarefa",
+  "tag": "testse 01"
+}
+
+###
+
+# @name list_tasks
+GET {{baseUrl}}/tarefas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name delete_task
+DELETE  {{baseUrl}}/tarefas/7b24829e-6796-40e3-bc38-234f91fe1d06
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name update_task
+PUT {{baseUrl}}/tarefas/d403d960-5d3e-4fad-9303-9efcc130aec9
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "tarefaa teste 01",
+  "status": "concluida",
+  "description": "desscrição da tarefa",
+  "tag": "testse 01"
+}
+

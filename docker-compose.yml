@@ -6,9 +6,9 @@ services:
     ports:
     - 5432:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: docker
-      POSTGRES_DB: todoForYou
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: tododb
       PGDATA: /data/postgres
     volumes:
     - ./data/pg:/data/postgres

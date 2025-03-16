@@ -1,2 +1,4 @@
 dist
 node_modules
+vitest.config.
+vitest.config.e2e.ts
