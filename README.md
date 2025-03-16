@@ -1,17 +1,87 @@
-de o comando npm i
+# 📚 Api ToDo4YoU
 
-renomear o arquivo .exemple.env para .env
-venrificar se tem o openssl instalado
-rodar o comando openssl genpkey -algorithm RSA -out private_key.pem
-depois o comando openssl rsa -pubout -in private_key.pem -out public_key.pem
-rodar o comando [Convert]::ToBase64String([IO.File]::ReadAllBytes('private_key.pem')) | Out-File 'private_key_base64.txt'
-copiar o conteudo de private_key_base64.txt para JWT_PRIVATE_KEY
-RODAR O COMANDO [Convert]::ToBase64String([IO.File]::ReadAllBytes('public_key.pem')) | Out-File 'public_key_base64.txt' E copiar o arquivo de public_key_base64.txt para JWT_PUBLIC_KEY
+## 🚀 Tecnologias Utilizadas
+- NestJs
+- TypeScript
+- Prisma
+- Postgres
+- Docker
+- JWT
+- Passport
+- Zod
+- Multer
 
-rodar docker compose up -d
+---
 
-no env altera o usuario, senha e banco de dados do DATABASE_URL pelo usuario, senha e banco de dados setados no arquivo docker-compose.yml
+## ⚙️ Instalação na Máquina Local
 
-rodar o comando npx prisma migrate dev e de um nome a migration
+### 🛠️ Programas Necessários
+- NodeJs
+- Docker Compose
+- Prisma
+- OpenSSL
 
-rode os tests end to end npm run test:e2e
+---
+
+### 📥 Passo a Passo
+
+1. **Clone o repositório:**
+```bash
+ git clone <URL-DO-REPOSITÓRIO>
+```
+
+2. **Acesse a pasta do projeto:**
+```bash
+cd apiTodo4You
+```
+
+3. **Renomeie o arquivo de ambiente:**
+```bash
+mv .exemple.env .env
+```
+
+4. **Gere a chave privada para autenticação:**
+```bash
+openssl genpkey -algorithm RSA -out private_key.pem
+```
+
+5. **Gere a chave pública:**
+```bash
+openssl rsa -pubout -in private_key.pem -out public_key.pem
+```
+
+6. **Converta a chave privada para base64:**
+```bash
+[Convert]::ToBase64String([IO.File]::ReadAllBytes('private_key.pem')) | Out-File 'private_key_base64.txt'
+```
+- Copie o conteúdo do arquivo gerado e cole na variável `JWT_PRIVATE_KEY` dentro do `.env` como uma string (`""`).
+
+7. **Converta a chave pública para base64:**
+```bash
+[Convert]::ToBase64String([IO.File]::ReadAllBytes('public_key.pem')) | Out-File 'public_key_base64.txt'
+```
+- Copie o conteúdo do arquivo gerado e cole na variável `JWT_PUBLIC_KEY` dentro do `.env` como uma string (`""`).
+
+8. **Configure o banco de dados:**
+- No arquivo `.env`, altere o `DATABASE_URL` com o usuário, senha e nome do banco de dados definidos no `docker-compose.yml`.
+
+9. **Suba os containers com Docker:**
+```bash
+docker compose up -d
+```
+
+10. **Execute as migrations do Prisma:**
+```bash
+npx prisma migrate dev
+```
+- Dê um nome à migration quando solicitado.
+
+11. **Execute os testes end-to-end:**
+```bash
+npm run test:e2e
+```
+
+---
+
+🎉 Pronto! Sua API ToDo4YoU está configurada e pronta para uso!
+
