@@ -46,14 +46,14 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name delete_task
-DELETE  {{baseUrl}}/tarefas/7b24829e-6796-40e3-bc38-234f91fe1d06
+DELETE  {{baseUrl}}/tarefas/{id da task}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ###
 
 # @name update_task
-PUT {{baseUrl}}/tarefas/d403d960-5d3e-4fad-9303-9efcc130aec9
+PUT {{baseUrl}}/tarefas/{id da task}
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -63,4 +63,16 @@ Authorization: Bearer {{authToken}}
   "description": "desscrição da tarefa",
   "tag": "testse 01"
 }
+
+###
+
+# @name update_profile
+PATCH {{baseUrl}}/usuarios/perfil
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Caio Ribeiro"
+}
+
 

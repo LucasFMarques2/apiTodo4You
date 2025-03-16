@@ -5,8 +5,10 @@ import { JwtService } from '@nestjs/jwt'
 import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
+import * as path from 'path'
+import { resolve } from 'path'
 
-describe('Update user (E2E)', () => {
+describe('Upload User Avatar (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
@@ -28,7 +30,7 @@ describe('Update user (E2E)', () => {
     await app.close()
   })
 
-  test('[PATCH] /usuarios/perfil', async () => {
+  test('[PATCH] /usuarios/upload', async () => {
     const hashedPassword = await hash('12345678', 8)
 
     const user = await prisma.user.create({
@@ -41,26 +43,21 @@ describe('Update user (E2E)', () => {
 
     const accessToken = jwt.sign({ sub: user.id })
 
+    const filePath = path.join(__dirname, './fileImageTest/test-avatar.jpeg')
+
     const response = await request(app.getHttpServer())
-      .patch('/usuarios/perfil')
+      .patch('/usuarios/upload')
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        name: 'Novo Nome',
-        oldPassword: '12345678',
-        newPassword: '123456789',
-      })
+      .attach('file', filePath)
 
     expect(response.statusCode).toBe(200)
-    expect(response.body).toHaveProperty(
-      'message',
-      'Usuário atualizado com sucesso',
-    )
+    expect(response.body).toHaveProperty('avatarUrl')
+    expect(response.body.avatarUrl).toContain('uploads/avatars')
 
     const updatedUser = await prisma.user.findUnique({
       where: { id: user.id },
     })
 
-    expect(updatedUser.name).toBe('Novo Nome')
-    expect(updatedUser.password).not.toBe('123456789')
+    expect(updatedUser.avatar).toContain('avatars/')
   })
 })

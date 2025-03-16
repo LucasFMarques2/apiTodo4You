@@ -24,7 +24,7 @@ export type updateAccountSchemaType = z.infer<typeof UpdateAccountSchema>
 export class UpdateAccountController {
   constructor(private prisma: PrismaService) {}
 
-  @Patch('me')
+  @Patch('perfil')
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(UpdateAccountSchema))
   async handle(@Request() req, @Body() body: updateAccountSchemaType) {
