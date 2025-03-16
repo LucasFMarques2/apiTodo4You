@@ -27,7 +27,7 @@
 
 1. **Clone o repositório:**
 ```bash
- git clone <URL-DO-REPOSITÓRIO>
+ git clone https://github.com/LucasFMarques2/apiTodo4You.git
 ```
 
 2. **Acesse a pasta do projeto:**
