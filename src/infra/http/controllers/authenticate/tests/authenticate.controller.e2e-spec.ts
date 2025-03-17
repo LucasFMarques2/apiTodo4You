@@ -37,7 +37,13 @@ describe('Authenticate (E2E)', () => {
 
     expect(response.statusCode).toBe(201)
     expect(response.body).toEqual({
-      accesstoken: expect.any(String),
+      acessToken: expect.any(String),
+      user: expect.objectContaining({
+        id: expect.any(String),
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        avatar: null,
+      }),
     })
   })
 })

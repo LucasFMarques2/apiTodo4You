@@ -22,7 +22,7 @@ model User{
 model Task{
   id       String   @id @default(uuid())
   title     String
-  status    String
+  status    String?  @default("pendente")
   description String
   tag       String
   createdAt DateTime @default(now())  @map("created_at")

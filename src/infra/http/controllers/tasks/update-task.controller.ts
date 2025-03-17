@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common'
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
 import { PrismaService } from '@/database/prisma/prisma.service'
-import { TaksBodyShema } from './create-tasks.controller'
+import { TasksBodySchema } from './create-tasks.controller'
 
 @Controller('tarefas/:id')
 export class UpdateTasksController {
@@ -18,7 +18,7 @@ export class UpdateTasksController {
   @Put()
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
-  async handle(@Param('id') id: string, @Body() data: TaksBodyShema) {
+  async handle(@Param('id') id: string, @Body() data: TasksBodySchema) {
     const taskExists = await this.prisma.task.findFirst({
       where: { id },
     })

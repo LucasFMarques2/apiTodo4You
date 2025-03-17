@@ -34,18 +34,21 @@ export class UpdateAccountController {
     if (!userId) {
       throw new UnauthorizedException('Usuário não autenticado')
     }
-    if (newPassword && !oldPassword) {
-      throw new UnauthorizedException(
-        'Senha antiga é necessária para atualizar a senha',
-      )
-    }
-    if (oldPassword && newPassword) {
+
+    if (oldPassword) {
+      if (!newPassword) {
+        throw new UnauthorizedException(
+          'Nova senha é necessária para atualizar a senha',
+        )
+      }
+
       const userFromDb = await this.prisma.user.findUnique({
         where: { id: userId },
       })
       if (!userFromDb || !userFromDb.password) {
         throw new UnauthorizedException('Senha do usuário não encontrada')
       }
+
       const isOldPasswordCorrect = await compare(
         oldPassword,
         userFromDb.password,
@@ -53,18 +56,21 @@ export class UpdateAccountController {
       if (!isOldPasswordCorrect) {
         throw new UnauthorizedException('A senha antiga está incorreta')
       }
+
       const hashedNewPassword = await hash(newPassword, 8)
       await this.prisma.user.update({
         where: { id: userId },
         data: { password: hashedNewPassword },
       })
     }
+
     if (name) {
       await this.prisma.user.update({
         where: { id: userId },
         data: { name },
       })
     }
+
     return { message: 'Usuário atualizado com sucesso' }
   }
 }

@@ -8,6 +8,8 @@ import {
   UseGuards,
   UseInterceptors,
   Request,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { multerOptions } from '../../config/multerConfig'
@@ -22,6 +24,17 @@ export class UploadFileAccountController {
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async handle(@UploadedFile() file: Express.Multer.File, @Request() req) {
     const userId = req.user.id || req.user.sub
+
+    if (!file) {
+      throw new BadRequestException('Nenhum arquivo enviado.')
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId } })
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.')
+    }
+
     const avatarPath = `avatars/${file.filename}`
 
     await this.prisma.user.update({
@@ -29,8 +42,10 @@ export class UploadFileAccountController {
       data: { avatar: avatarPath },
     })
 
+    const avatarUrl = `${process.env.APP_URL || 'http://localhost:3333'}/${avatarPath}`
+
     return {
-      avatarUrl: `${process.env.APP_URL || 'http://localhost:3333'}/avatars/${file.filename}`,
+      avatarUrl,
     }
   }
 }
