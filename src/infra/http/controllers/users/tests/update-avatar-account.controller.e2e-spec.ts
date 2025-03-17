@@ -6,7 +6,6 @@ import { Test } from '@nestjs/testing'
 import { hash } from 'bcryptjs'
 import request from 'supertest'
 import * as path from 'path'
-import { resolve } from 'path'
 
 describe('Upload User Avatar (E2E)', () => {
   let app: INestApplication

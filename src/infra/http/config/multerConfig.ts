@@ -2,6 +2,7 @@ import { diskStorage } from 'multer'
 import * as path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import * as fs from 'fs'
+import { ConflictException } from '@nestjs/common'
 
 const uploadsDir = path.join(process.cwd(), 'uploads', 'avatars')
 
@@ -23,4 +24,15 @@ export const storage = diskStorage({
 export const multerOptions = {
   storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/jpg']
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true)
+    } else {
+      cb(
+        new ConflictException('Apenas arquivos JPEG e PNG são permitidos'),
+        false,
+      )
+    }
+  },
 }

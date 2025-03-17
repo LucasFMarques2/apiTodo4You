@@ -20,9 +20,8 @@ export class UploadFileAccountController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file', multerOptions))
-  async handle(@UploadedFile() file, @Request() req) {
+  async handle(@UploadedFile() file: Express.Multer.File, @Request() req) {
     const userId = req.user.id || req.user.sub
-
     const avatarPath = `avatars/${file.filename}`
 
     await this.prisma.user.update({
@@ -31,7 +30,7 @@ export class UploadFileAccountController {
     })
 
     return {
-      avatarUrl: `${process.env.APP_URL}/uploads/${avatarPath}`,
+      avatarUrl: `${process.env.APP_URL || 'http://localhost:3333'}/avatars/${file.filename}`,
     }
   }
 }

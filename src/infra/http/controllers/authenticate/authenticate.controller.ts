@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  NotFoundException,
   Post,
   UnauthorizedException,
   UsePipes,
@@ -12,8 +13,8 @@ import { PrismaService } from '@/database/prisma/prisma.service'
 import { z } from 'zod'
 
 const authenticateBodySchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z.string().email().nonempty(),
+  password: z.string().min(8).nonempty(),
 })
 
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
@@ -30,6 +31,10 @@ export class AuthenticateController {
   async handle(@Body() body: AuthenticateBodySchema) {
     const { email, password } = body
 
+    if (!email || !password) {
+      throw new NotFoundException('Campo email e/ou senha vazio')
+    }
+
     const user = await this.prisma.user.findUnique({
       where: { email },
     })
@@ -44,10 +49,11 @@ export class AuthenticateController {
       throw new UnauthorizedException('Email e/ou senha inválido')
     }
 
-    const acessToken = this.jwt.sign({ sub: user.id })
+    const AcessToken = this.jwt.sign({ sub: user.id })
 
     return {
-      access_token: acessToken,
+      acessToken: AcessToken,
+      user,
     }
   }
 }

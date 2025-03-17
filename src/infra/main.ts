@@ -10,10 +10,12 @@ async function bootstrap() {
     logger: ['error', 'warn'],
   })
 
+  app.enableCors()
+
   const configService: ConfigService<Env, true> = app.get(ConfigService)
   const port = configService.get('PORT', { infer: true })
 
-  app.useStaticAssets(join(process.cwd(), '../../uploads/avatars'), {
+  app.useStaticAssets(join(__dirname, '..', '..', 'uploads', 'avatars'), {
     prefix: '/uploads/avatars',
   })
 
