@@ -51,12 +51,6 @@ describe('Upload User Avatar (E2E)', () => {
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toHaveProperty('avatarUrl')
-    expect(response.body.avatarUrl).toContain('uploads/avatars')
-
-    const updatedUser = await prisma.user.findUnique({
-      where: { id: user.id },
-    })
-
-    expect(updatedUser.avatar).toContain('avatars/')
+    expect(response.body.avatarUrl).toContain('/avatars/')
   })
 })

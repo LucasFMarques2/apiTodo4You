@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common'
+import { Controller, Get, Request, UseGuards } from '@nestjs/common'
 import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
 import { PrismaService } from '@/database/prisma/prisma.service'
 
@@ -8,8 +8,11 @@ export class ListTasksController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async handle() {
+  async handle(@Request() req) {
     const tasks = await this.prisma.task.findMany({
+      where: {
+        userId: req.user.sub,
+      },
       orderBy: {
         createdAt: 'desc',
       },

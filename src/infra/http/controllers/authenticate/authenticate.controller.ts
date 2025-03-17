@@ -14,7 +14,7 @@ import { z } from 'zod'
 
 const authenticateBodySchema = z.object({
   email: z.string().email().nonempty(),
-  password: z.string().min(8).nonempty(),
+  password: z.string().nonempty(),
 })
 
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
@@ -33,6 +33,12 @@ export class AuthenticateController {
 
     if (!email || !password) {
       throw new NotFoundException('Campo email e/ou senha vazio')
+    }
+
+    if (password.length < 8) {
+      throw new UnauthorizedException(
+        'A senha deve ter pelo menos 8 caracteres',
+      )
     }
 
     const user = await this.prisma.user.findUnique({

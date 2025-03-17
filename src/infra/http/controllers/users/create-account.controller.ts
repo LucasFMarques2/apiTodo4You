@@ -5,6 +5,7 @@ import {
   ConflictException,
   HttpCode,
   UsePipes,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { PrismaService } from '@/database/prisma/prisma.service'
 import { hash } from 'bcryptjs'
@@ -14,7 +15,7 @@ import { ZodValidationPipe } from '@/http/pipes/zod-validation-pipe'
 const CreateAccountSchema = z.object({
   name: z.string(),
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string(),
 })
 
 export type accountShemaType = z.infer<typeof CreateAccountSchema>
@@ -37,6 +38,12 @@ export class CreateAccountController {
 
     if (userWithSameEmail) {
       throw new ConflictException('Esse email de usuário já existe')
+    }
+
+    if (password.length < 8) {
+      throw new UnauthorizedException(
+        'A senha deve ter pelo menos 8 caracteres',
+      )
     }
 
     const hashedPassword = await hash(password, 8)

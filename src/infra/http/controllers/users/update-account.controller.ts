@@ -15,8 +15,8 @@ import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
 
 const UpdateAccountSchema = z.object({
   name: z.string().optional(),
-  oldPassword: z.string().min(8).optional(),
-  newPassword: z.string().min(8).optional(),
+  oldPassword: z.string().optional(),
+  newPassword: z.string().optional(),
 })
 export type updateAccountSchemaType = z.infer<typeof UpdateAccountSchema>
 
@@ -33,6 +33,18 @@ export class UpdateAccountController {
     const userId = tokenUser.id || tokenUser.sub
     if (!userId) {
       throw new UnauthorizedException('Usuário não autenticado')
+    }
+
+    if (oldPassword && oldPassword.length < 8) {
+      throw new UnauthorizedException(
+        'A senha antiga deve ter pelo menos 8 caracteres',
+      )
+    }
+
+    if (newPassword && newPassword.length < 8) {
+      throw new UnauthorizedException(
+        'A nova senha deve ter pelo menos 8 caracteres',
+      )
     }
 
     if (oldPassword) {
