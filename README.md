@@ -20,6 +20,7 @@
 - Docker Compose
 - Prisma
 - OpenSSL
+- Postgres
 
 ---
 
