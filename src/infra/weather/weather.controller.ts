@@ -12,13 +12,11 @@ export class WeatherController {
     @Query('lat') lat?: number,
     @Query('lon') lon?: number,
   ) {
-    let city = 'Brasilia' // Fallback padrão
+    let city = 'Sao Paullo'
 
     if (lat && lon) {
-      // Usa coordenadas se disponíveis
       return this.weatherService.getWeatherByCoords(lat, lon)
     } else {
-      // Mantém a lógica de IP
       const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
       city = await this.weatherService.getUserCity(ip as string)
       return this.weatherService.getWeather(city)
