@@ -89,5 +89,7 @@ npm run test:e2e
 
 ---
 
+Fronted: https://github.com/LucasFMarques2/todo4You-frontend
+
 🎉 Pronto! Sua API ToDo4YoU está configurada e pronta para uso!
 
